@@ -1,6 +1,6 @@
 import { Button } from "../../ui/button";
 import NavSheets from "./NavSheets";
-import Navmenu from "./Navmenu";
+import Navmenu from "./Nav-menu";
 
 const Navbar = () => {
   return (

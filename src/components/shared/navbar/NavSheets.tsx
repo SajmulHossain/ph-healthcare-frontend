@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
 import { Button } from "../../ui/button";
-import Navmenu from "./Navmenu";
+import Navmenu from "./Nav-menu";
 
 const NavSheets = () => {
   return (
