@@ -7,7 +7,7 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import Navmenu from "./Navmenu";
 
 const NavSheets = () => {
