@@ -11,9 +11,12 @@ import {
 } from "./ui/field";
 import { Input } from "./ui/input";
 import { useActionState } from "react";
+import { registerPatient } from "@/services/auth/registerPatient";
 
 const RegisterForm = () => {
-      const [state, formAction, isPending] = useActionState(() => {}, null)
+      const [state, formAction, isPending] = useActionState(registerPatient, null)
+
+      console.log(state);
   
   return (
     <>
@@ -95,7 +98,9 @@ const RegisterForm = () => {
 
           <FieldGroup>
             <Field>
-              <Button type="submit">Create Account</Button>
+              <Button type="submit" disabled={isPending}>
+                {isPending ? "Creating Account..." : "Create Account"}
+              </Button>
               <FieldDescription>
                 Already have an account?
                 <Link href="/login">Login</Link>
