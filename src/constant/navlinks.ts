@@ -9,14 +9,14 @@ export const navlinks: { label: string; url: string }[] = [
   },
   {
     label: "Doctor",
-    url: "/about",
+    url: "/doctor",
   },
   {
     label: "Patient",
-    url: "/about",
+    url: "/patient",
   },
   {
     label: "Dashboard",
-    url: "/about",
+    url: "/dashboard",
   },
 ];

@@ -13,7 +13,7 @@ import Navmenu from "./Navmenu";
 const NavSheets = () => {
   return (
     <Sheet>
-      <SheetTrigger>
+      <SheetTrigger asChild>
         <Button variant={"outline"}>
           <MenuIcon />
         </Button>
