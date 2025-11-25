@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import Link from "next/link";
-import { Button } from "./ui/button";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "./ui/field";
-import { Input } from "./ui/input";
-import { useActionState } from "react";
 import { loginUser } from "@/services/auth/loginUser";
+import Link from "next/link";
+import { useActionState } from "react";
+import { Button } from "./ui/button";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "./ui/field";
+import { Input } from "./ui/input";
 
 const LoginForm = () => {
   const [state, formAction, isPending] = useActionState(loginUser, null);
@@ -30,9 +30,9 @@ const LoginForm = () => {
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <Input id="email" name="email" placeholder="m@example.com" />
             {getFieldErrors("email") && (
-              <FieldDescription className="text-red-600/70">
+              <FieldError>
                 {getFieldErrors("email")}
-              </FieldDescription>
+              </FieldError>
             )}
           </Field>
 
@@ -48,9 +48,9 @@ const LoginForm = () => {
             />
 
             {getFieldErrors("password") && (
-              <FieldDescription className="text-red-600/70">
+              <FieldError className="text-red-600/70">
                 {getFieldErrors("password")}
-              </FieldDescription>
+              </FieldError>
             )}
           </Field>
         </div>

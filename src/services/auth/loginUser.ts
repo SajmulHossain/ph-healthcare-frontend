@@ -4,9 +4,11 @@
 import z from "zod";
 
 const loginValidationZodSchema = z.object({
-  email: z.email(),
-  password: z.string().min(6, {error: "Password must be at least 6 characters"})
-})
+  email: z.email("Give a valid email!"),
+  password: z
+    .string()
+    .min(6, { error: "Password must be at least 6 characters" }),
+});
 
 export const loginUser = async (
   _currentState: any,

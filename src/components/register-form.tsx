@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Link from "next/link";
@@ -16,6 +17,17 @@ import { registerPatient } from "@/services/auth/registerPatient";
 const RegisterForm = () => {
       const [state, formAction, isPending] = useActionState(registerPatient, null)
 
+      
+  const getFieldErrors = (fieldName: string) => {
+    if (state?.errors) {
+      const error = state.errors.find(
+        (error: any) => error.field === fieldName
+      );
+
+      return error?.message;
+    }
+  };
+
       console.log(state);
   
   return (
@@ -28,13 +40,13 @@ const RegisterForm = () => {
               <Input
                 id="name"
                 autoComplete="off"
+                aria-invalid={!!getFieldErrors("name")}
                 placeholder="John Doe"
                 name="name"
-                required
               />
-              <FieldDescription>
-                This appears on invoices and emails.
-              </FieldDescription>
+              {getFieldErrors("name") && (
+                <FieldError>{getFieldErrors("name")}</FieldError>
+              )}
             </Field>
 
             <Field>
@@ -42,12 +54,13 @@ const RegisterForm = () => {
               <Input
                 id="address"
                 autoComplete="off"
-                aria-invalid
+                aria-invalid={!!getFieldErrors("address")}
                 name="address"
                 placeholder="username@example.com"
-                required
               />
-              <FieldError>Choose another username.</FieldError>
+              {getFieldErrors("address") && (
+                <FieldError>{getFieldErrors("address")}</FieldError>
+              )}
             </Field>
           </div>
 
@@ -57,13 +70,14 @@ const RegisterForm = () => {
               <Input
                 id="email"
                 autoComplete="off"
-                aria-invalid
+                aria-invalid={!!getFieldErrors("email")}
                 name="email"
                 type="email"
                 placeholder="username@example.com"
-                required
               />
-              <FieldError>Choose another username.</FieldError>
+              {getFieldErrors("email") && (
+                <FieldError>{getFieldErrors("email")}</FieldError>
+              )}
             </Field>
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>
@@ -73,11 +87,11 @@ const RegisterForm = () => {
                 autoComplete="off"
                 placeholder="Enter your password"
                 name="password"
-                required
+                aria-invalid={!!getFieldErrors("password")}
               />
-              <FieldDescription>
-                This appears on invoices and emails.
-              </FieldDescription>
+              {getFieldErrors("password") && (
+                <FieldError>{getFieldErrors("password")}</FieldError>
+              )}
             </Field>
           </div>
 
@@ -89,11 +103,11 @@ const RegisterForm = () => {
               autoComplete="off"
               placeholder="Enter your password"
               name="confirmPassword"
-              required
+              aria-invalid={!!getFieldErrors("confirmPassword")}
             />
-            <FieldDescription>
-              This appears on invoices and emails.
-            </FieldDescription>
+            {getFieldErrors("confirmPassword") && (
+              <FieldError>{getFieldErrors("confirmPassword")}</FieldError>
+            )}
           </Field>
 
           <FieldGroup className="text-center">
@@ -103,10 +117,7 @@ const RegisterForm = () => {
               </Button>
               <FieldDescription>
                 Already have an account?{" "}
-                <Link
-                  href="/login"
-                  className="text-blue-600 hover:underline"
-                >
+                <Link href="/login" className="text-blue-600 hover:underline">
                   Login
                 </Link>
               </FieldDescription>
