@@ -1,6 +1,7 @@
 import { Button } from "../../ui/button";
 import NavSheets from "./NavSheets";
 import Navmenu from "./Nav-menu";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -13,7 +14,9 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button>Login</Button>
+          <Button>
+            <Link href="/login">Login</Link>
+          </Button>
           <div className="md:hidden">
             <NavSheets />
           </div>

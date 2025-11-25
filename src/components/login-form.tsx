@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Link from "next/link";
@@ -5,9 +6,21 @@ import { Button } from "./ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
 import { useActionState } from "react";
+import { loginUser } from "@/services/auth/loginUser";
 
 const LoginForm = () => {
-    const [state, formAction, isPending] = useActionState(() => {}, null)
+  const [state, formAction, isPending] = useActionState(loginUser, null);
+
+  console.log(state);
+
+  const getFieldErrors = (fieldName: string) => {
+    if (state?.errors) {
+      const error = state.errors.find((error: any) => error.field === fieldName);
+
+      return error?.message;
+    }
+  };
+
   return (
     <form action={formAction}>
       <FieldGroup>
@@ -15,13 +28,12 @@ const LoginForm = () => {
           {/* Email */}
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="m@example.com"
-              //   required
-            />
+            <Input id="email" name="email" placeholder="m@example.com" />
+            {getFieldErrors("email") && (
+              <FieldDescription className="text-red-600/70">
+                {getFieldErrors("email")}
+              </FieldDescription>
+            )}
           </Field>
 
           {/* Password */}
@@ -34,12 +46,18 @@ const LoginForm = () => {
               placeholder="Enter your password"
               //   required
             />
+
+            {getFieldErrors("password") && (
+              <FieldDescription className="text-red-600/70">
+                {getFieldErrors("password")}
+              </FieldDescription>
+            )}
           </Field>
         </div>
         <FieldGroup className="mt-4">
           <Field>
-            <Button type="submit">
-              {/* {isPending ? "Logging in..." : "Login"} */} Login
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Logging in..." : "Login"}
             </Button>
 
             <FieldDescription className="px-6 text-center">

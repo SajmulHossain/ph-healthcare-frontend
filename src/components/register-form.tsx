@@ -96,14 +96,19 @@ const RegisterForm = () => {
             </FieldDescription>
           </Field>
 
-          <FieldGroup>
+          <FieldGroup className="text-center">
             <Field>
               <Button type="submit" disabled={isPending}>
                 {isPending ? "Creating Account..." : "Create Account"}
               </Button>
               <FieldDescription>
-                Already have an account?
-                <Link href="/login">Login</Link>
+                Already have an account?{" "}
+                <Link
+                  href="/login"
+                  className="text-blue-600 hover:underline"
+                >
+                  Login
+                </Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

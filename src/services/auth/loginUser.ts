@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import z from "zod";
+
+const loginValidationZodSchema = z.object({
+  email: z.email(),
+  password: z.string().min(6, {error: "Password must be at least 6 characters"})
+})
+
 export const loginUser = async (
   _currentState: any,
   formData: FormData
@@ -10,6 +17,16 @@ export const loginUser = async (
       email: formData.get("email"),
       password: formData.get("password"),
     };
+    const validatedData = loginValidationZodSchema.safeParse(loginData)
+
+    if(!validatedData.success) {
+      return {
+        errors: validatedData.error.issues.map(issue => ({
+          field: issue.path[0],
+          message: issue.message
+        }))
+      }
+    }
 
     const res = await fetch("http://localhost:5000/api/v1/auth/login", {
       method: "POST",
