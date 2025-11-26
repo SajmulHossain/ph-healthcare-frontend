@@ -77,13 +77,13 @@ cookieHeaders.map((cookie: string) => {
     expires: accessTokenObject.Expires,
     secure: true,
     path: accessTokenObject.Path || "/",
-    sameSite: "none"
+    sameSite: accessTokenObject.SameSite || "none"
    });
    cookieStore.set("refreshToken", refreshTokenObject.refreshToken, {
      httpOnly: true,
      maxAge: parseInt(refreshTokenObject["Max-Age"]),
      expires: refreshTokenObject.Expires,
-     sameSite: "none",
+     sameSite: refreshTokenObject.SameSite || "none",
      secure: true,
      path: refreshTokenObject.Path || "/",
    });
