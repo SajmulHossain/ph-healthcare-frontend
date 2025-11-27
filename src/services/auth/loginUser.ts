@@ -3,7 +3,11 @@
 
 import {parse} from 'cookie';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import z from "zod";
+import jwt, { Secret } from 'jsonwebtoken';
+import envConfig from '@/lib/env.config';
+import { getDefaultDashboardRoutes } from '@/lib/auth-utils';
 
 const loginValidationZodSchema = z.object({
   email: z.email("Give a valid email!"),
@@ -17,8 +21,7 @@ export const loginUser = async (
   formData: FormData
 ): Promise<any> => {
   try {
-    const redirect = formData.get("redirect");
-    console.log(redirect, "from server");
+    const redirectTo = formData.get("redirect") || null;
     
     let accessTokenObject: null | any = null;
     let refreshTokenObject: null | any = null;
@@ -44,8 +47,6 @@ export const loginUser = async (
         "Content-Type": "application/json",
       },
     });
-
-    const result = await res.json();
 
    const cookieHeaders = res.headers.getSetCookie();
 
@@ -90,9 +91,23 @@ cookieHeaders.map((cookie: string) => {
      secure: true,
      path: refreshTokenObject.Path || "/",
    });
+
+   const verifiedToken = jwt.verify(
+         accessTokenObject.accessToken,
+         envConfig.access_token_secret as Secret
+       );
    
-    return result;
-  } catch (error) {
+       if (typeof verifiedToken === "string") {
+         cookieStore.delete("accessToken");
+         cookieStore.delete("refreshToken");
+         throw new Error("Invalid token")
+       }
+   
+    redirect(redirectTo?.toString() || getDefaultDashboardRoutes(verifiedToken.role));
+  } catch (error : any) {
+    if(error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
     console.log(error);
     return { error, message: "Login failed" };
   }
