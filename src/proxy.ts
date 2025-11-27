@@ -91,25 +91,56 @@ export async function proxy(request: NextRequest) {
   const cookieStore = await cookies();
   const accessToken = request.cookies.get("accessToken")?.value || null;
 
-  if(accessToken) {
-    const verifiedToken = jwt.verify(accessToken, envConfig.access_token_secret as Secret)
+  if (accessToken) {
+    const verifiedToken = jwt.verify(
+      accessToken,
+      envConfig.access_token_secret as Secret
+    );
 
-    if(typeof verifiedToken === "string") {
+    if (typeof verifiedToken === "string") {
       cookieStore.delete("accessToken");
       cookieStore.delete("refreshToken");
-      return NextResponse.redirect(new URL("/login", request.url))
+      return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    userRole = verifiedToken.role; 
+    userRole = verifiedToken.role;
   }
 
   const routeOwner = getRouteOwner(pathname);
   const isAuth = isAuthRoutes(pathname);
 
-  if(accessToken && isAuth) {
-    return NextResponse.redirect(new URL(getDefaultDashboardRoutes(userRole as UserRole), request.url))
+  if (accessToken && isAuth) {
+    return NextResponse.redirect(
+      new URL(getDefaultDashboardRoutes(userRole as UserRole), request.url)
+    );
   }
-  
+
+  if (!routeOwner) {
+    return NextResponse.next();
+  }
+
+  if (!accessToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (routeOwner === "COMMON") {
+    return NextResponse.next();
+  }
+
+  if (
+    routeOwner === "ADMIN" ||
+    routeOwner === "DOCTOR" ||
+    routeOwner === "PATIENT"
+  ) {
+    if (userRole !== routeOwner) {
+      return NextResponse.redirect(
+        new URL(getDefaultDashboardRoutes(userRole as UserRole), request.url)
+      );
+    }
+
+    return NextResponse.next();
+  }
+
   return NextResponse.next();
 }
 
