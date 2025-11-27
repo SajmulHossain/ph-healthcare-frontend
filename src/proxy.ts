@@ -1,5 +1,7 @@
-import { NextResponse, NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
+import { NextRequest, NextResponse } from "next/server";
+import envConfig from "./lib/env.config";
+import { cookies } from "next/headers";
 
 type UserRole = "DOCTOR" | "PATIENT" | "ADMIN";
 
@@ -82,9 +84,32 @@ const getDefaultDashboardRoutes = (role: UserRole): string => {
   return "/";
 };
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   //   return NextResponse.redirect(new URL('/', request.url))
-  console.log("pathname", request.url);
+  let userRole: UserRole | null = null;
+  const pathname = request.nextUrl.pathname;
+  const cookieStore = await cookies();
+  const accessToken = request.cookies.get("accessToken")?.value || null;
+
+  if(accessToken) {
+    const verifiedToken = jwt.verify(accessToken, envConfig.access_token_secret as Secret)
+
+    if(typeof verifiedToken === "string") {
+      cookieStore.delete("accessToken");
+      cookieStore.delete("refreshToken");
+      return NextResponse.redirect(new URL("/login", request.url))
+    }
+
+    userRole = verifiedToken.role; 
+  }
+
+  const routeOwner = getRouteOwner(pathname);
+  const isAuth = isAuthRoutes(pathname);
+
+  if(accessToken && isAuth) {
+    return NextResponse.redirect(new URL(getDefaultDashboardRoutes(userRole as UserRole), request.url))
+  }
+  
   return NextResponse.next();
 }
 
