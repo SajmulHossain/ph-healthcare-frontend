@@ -17,6 +17,9 @@ export const loginUser = async (
   formData: FormData
 ): Promise<any> => {
   try {
+    const redirect = formData.get("redirect");
+    console.log(redirect, "from server");
+    
     let accessTokenObject: null | any = null;
     let refreshTokenObject: null | any = null;
     const loginData = {

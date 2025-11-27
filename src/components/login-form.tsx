@@ -8,10 +8,8 @@ import { Button } from "./ui/button";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
 
-const LoginForm = () => {
+const LoginForm = ({params}: {params?: string}) => {
   const [state, formAction, isPending] = useActionState(loginUser, null);
-
-  console.log(state);
 
   const getFieldErrors = (fieldName: string) => {
     if (state?.errors) {
@@ -21,8 +19,11 @@ const LoginForm = () => {
     }
   };
 
+  console.log(params);
+
   return (
     <form action={formAction}>
+      {params && <input type="hidden" name="redirect" value={params} />}
       <FieldGroup>
         <div className="grid grid-cols-1 gap-4">
           {/* Email */}
@@ -30,9 +31,7 @@ const LoginForm = () => {
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <Input id="email" name="email" placeholder="m@example.com" />
             {getFieldErrors("email") && (
-              <FieldError>
-                {getFieldErrors("email")}
-              </FieldError>
+              <FieldError>{getFieldErrors("email")}</FieldError>
             )}
           </Field>
 
