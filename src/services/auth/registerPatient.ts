@@ -9,7 +9,7 @@ const registerPatientZodSchema = z
     password: z
       .string()
       .min(6, { error: "Password must be atleast 6 characters" }),
-    name: z.string().min(1, {error: "Name is required"}),
+    name: z.string().min(1, { error: "Name is required" }),
     email: z.email("Invalid email"),
     address: z.string().optional(),
     confirmPassword: z.string().min(6, { error: "Field is required" }),
@@ -61,16 +61,19 @@ export const registerPatient = async (
         method: "POST",
         body: newFormData,
       }
-    )
-    
+    );
+
     const result = await res.json();
 
-    if(result?.success) {
-      await loginUser(_currentState,formData);
+    if (result?.success) {
+      await loginUser(_currentState, formData);
     }
 
     return result;
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
     console.log(error);
     return { error: "Registration Failed", err: error };
   }

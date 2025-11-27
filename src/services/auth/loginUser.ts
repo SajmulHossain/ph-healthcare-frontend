@@ -109,6 +109,8 @@ export const loginUser = async (
       } else {
         redirect(getDefaultDashboardRoutes(verifiedToken.role));
       }
+    } else {
+      redirect(getDefaultDashboardRoutes(verifiedToken.role));
     }
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
