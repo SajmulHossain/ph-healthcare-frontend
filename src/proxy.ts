@@ -6,7 +6,6 @@ import { getDefaultDashboardRoutes, getRouteOwner, isAuthRoutes } from "./lib/au
 import { UserRole } from "./types";
 
 export async function proxy(request: NextRequest) {
-  //   return NextResponse.redirect(new URL('/', request.url))
   let userRole: UserRole | null = null;
   const pathname = request.nextUrl.pathname;
   const cookieStore = await cookies();

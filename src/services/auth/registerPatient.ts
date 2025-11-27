@@ -2,6 +2,7 @@
 "use server";
 
 import z from "zod";
+import { loginUser } from "./loginUser";
 
 const registerPatientZodSchema = z
   .object({
@@ -60,9 +61,15 @@ export const registerPatient = async (
         method: "POST",
         body: newFormData,
       }
-    ).then((res) => res.json());
+    )
+    
+    const result = await res.json();
 
-    return res;
+    if(result?.success) {
+      await loginUser(_currentState,formData);
+    }
+
+    return result;
   } catch (error) {
     console.log(error);
     return { error: "Registration Failed", err: error };
