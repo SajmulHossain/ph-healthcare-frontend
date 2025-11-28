@@ -1,15 +1,15 @@
 import jwt, { Secret } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
-import envConfig from "./lib/env.config";
-import { cookies } from "next/headers";
 import { getDefaultDashboardRoutes, getRouteOwner, isAuthRoutes } from "./lib/auth-utils";
+import envConfig from "./lib/env.config";
+import { deleteCookie, getCookie } from "./services/auth/tokenHandler";
 import { UserRole } from "./types";
 
 export async function proxy(request: NextRequest) {
   let userRole: UserRole | null = null;
   const pathname = request.nextUrl.pathname;
-  const cookieStore = await cookies();
-  const accessToken = request.cookies.get("accessToken")?.value || null;
+  // const accessToken = request.cookies.get("accessToken")?.value;
+  const accessToken = await getCookie("accessToken");
 
   if (accessToken) {
     const verifiedToken = jwt.verify(
@@ -18,8 +18,7 @@ export async function proxy(request: NextRequest) {
     );
 
     if (typeof verifiedToken === "string") {
-      cookieStore.delete("accessToken");
-      cookieStore.delete("refreshToken");
+     await deleteCookie();
       return NextResponse.redirect(new URL("/login", request.url));
     }
 

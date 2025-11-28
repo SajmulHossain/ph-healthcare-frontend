@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { parse } from "cookie";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import z from "zod";
-import jwt, { Secret } from "jsonwebtoken";
-import envConfig from "@/lib/env.config";
 import {
   getDefaultDashboardRoutes,
   isValidRedirectPath,
 } from "@/lib/auth-utils";
+import envConfig from "@/lib/env.config";
+import { parse } from "cookie";
+import jwt, { Secret } from "jsonwebtoken";
+import { redirect } from "next/navigation";
+import z from "zod";
 import { deleteCookie, setCookie } from "./tokenHandler";
 
 const loginValidationZodSchema = z.object({
