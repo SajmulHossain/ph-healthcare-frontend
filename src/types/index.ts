@@ -1,2 +1,2 @@
-export * from "./user"
-export * from "./routes"
+export * from "./user.interface"
+export * from "./routes.interface"

@@ -1,8 +1,10 @@
+import DashboardSidebarContent from "./DashboardSidebarContent";
+
 const DashboardSidebar = () => {
   return (
-    <div>
-      <h1>This is DashboardSidebar component</h1>
-    </div>
+    <aside>
+        <DashboardSidebarContent />
+    </aside>
   );
 };
 
