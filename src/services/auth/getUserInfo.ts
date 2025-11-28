@@ -1,9 +1,9 @@
 "use server";
 
-import { IUser } from "@/types";
-import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
-import { getCookie } from "./tokenHandler";
 import envConfig from "@/lib/env.config";
+import { IUser } from "@/types";
+import jwt, { Secret } from 'jsonwebtoken';
+import { getCookie } from "./tokenHandler";
 
 export const getUserInfo = async (): Promise<IUser | null> => {
   try {
@@ -24,5 +24,8 @@ export const getUserInfo = async (): Promise<IUser | null> => {
 
     return userInfo;
 
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
