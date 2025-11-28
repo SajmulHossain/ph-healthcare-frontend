@@ -1,23 +1,23 @@
 "use client"
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
 const LogoutToast = () => {
     const searchParams = useSearchParams();
+    const router = useRouter();
 
     useEffect(() => {
         if(searchParams.get("loggedOut") === "true") {
             toast.success("Logged out successfully!");
+            const newURL = new URL(window.location.href)
+            newURL.searchParams.delete("loggedOut");
+            router.replace(newURL.toString());
         }
-    }, [searchParams])
+    }, [searchParams, router])
 
-  return (
-    <div>
-      <h1>This is LogoutToast component</h1>
-    </div>
-  );
+    return null;
 };
 
 export default LogoutToast;

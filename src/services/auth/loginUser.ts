@@ -109,12 +109,12 @@ export const loginUser = async (
     if (redirectTo) {
       const requestPath = redirectTo.toString();
       if (isValidRedirectPath(requestPath, verifiedToken.role)) {
-        redirect(requestPath);
+        redirect(`${requestPath}?loggedIn=true`);
       } else {
-        redirect(getDefaultDashboardRoutes(verifiedToken.role));
+        redirect(`${getDefaultDashboardRoutes(verifiedToken.role)}?loggedIn=true`);
       }
     } else {
-      redirect(getDefaultDashboardRoutes(verifiedToken.role));
+      redirect(`${getDefaultDashboardRoutes(verifiedToken.role)}?loggedIn=true`);
     }
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
