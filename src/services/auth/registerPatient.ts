@@ -75,6 +75,13 @@ export const registerPatient = async (
       throw error;
     }
     console.log(error);
-    return { error: "Registration Failed", err: error };
+    return {
+      success: false,
+      error,
+      message:
+        process.env.NODE_ENV === "development"
+          ? error?.message
+          : "Login Failed",
+    };
   }
 };

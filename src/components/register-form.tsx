@@ -11,12 +11,18 @@ import {
   FieldLabel,
 } from "./ui/field";
 import { Input } from "./ui/input";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { registerPatient } from "@/services/auth/registerPatient";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
       const [state, formAction, isPending] = useActionState(registerPatient, null)
 
+        useEffect(() => {
+          if (state && !state?.success && state?.message) {
+            toast.error(state.message);
+          }
+        }, [state]);
       
   const getFieldErrors = (fieldName: string) => {
     if (state?.errors) {
@@ -27,8 +33,6 @@ const RegisterForm = () => {
       return error?.message;
     }
   };
-
-      console.log(state);
   
   return (
     <>

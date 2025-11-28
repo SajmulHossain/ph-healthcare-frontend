@@ -100,6 +100,12 @@ export const loginUser = async (
       throw new Error("Invalid token");
     }
 
+    const result = await res.json()
+
+    if(!result.success) {
+      throw new Error(result.message || "Login Failed!")
+    }
+
     if (redirectTo) {
       const requestPath = redirectTo.toString();
       if (isValidRedirectPath(requestPath, verifiedToken.role)) {
@@ -115,6 +121,13 @@ export const loginUser = async (
       throw error;
     }
     console.log(error);
-    return { error, message: "Login failed" };
+    return {
+      success: false,
+      error,
+      message:
+        process.env.NODE_ENV === "development"
+          ? error?.message
+          : "Login Failed",
+    };
   }
 };

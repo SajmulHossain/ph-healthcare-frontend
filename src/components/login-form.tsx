@@ -3,23 +3,36 @@
 
 import { loginUser } from "@/services/auth/loginUser";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { Button } from "./ui/button";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "./ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "./ui/field";
 import { Input } from "./ui/input";
+import { toast } from "sonner";
 
-const LoginForm = ({params}: {params?: string}) => {
+const LoginForm = ({ params }: { params?: string }) => {
   const [state, formAction, isPending] = useActionState(loginUser, null);
+
+  useEffect(() => {
+    if (state && !state?.success && state?.message) {
+      toast.error(state.message);
+    }
+  }, [state]);
 
   const getFieldErrors = (fieldName: string) => {
     if (state?.errors) {
-      const error = state.errors.find((error: any) => error.field === fieldName);
+      const error = state.errors.find(
+        (error: any) => error.field === fieldName
+      );
 
       return error?.message;
     }
   };
-
-  console.log(params);
 
   return (
     <form action={formAction}>
