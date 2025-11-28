@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { getIconComponent } from "@/lib/icon-mapper";
 import { cn } from "@/lib/utils";
 import { IUser } from "@/types";
 import { NavSection } from "@/types/dashboard.interface";
@@ -26,7 +27,7 @@ const DashboardSidebarContent = ({ userInfo, dashboardHome, navItems }: Dashboar
         </Link>
       </div>
 
-      
+
 
       {/* Navigation */}
       <ScrollArea className="flex-1 px-3 py-4">
@@ -41,8 +42,7 @@ const DashboardSidebarContent = ({ userInfo, dashboardHome, navItems }: Dashboar
               <div className="space-y-1">
                 {section.items.map((item) => {
                   const isActive = pathname === item.href;
-                  // const Icon = getIconComponent(item.icon);
-                  const Icon = Bell
+                  const Icon = getIconComponent(item.icon);
 
                   return (
                     <Link
