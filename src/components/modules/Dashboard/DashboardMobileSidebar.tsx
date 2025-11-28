@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { IUser } from "@/types";
 import { NavSection } from "@/types/dashboard.interface";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import { Bell } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
