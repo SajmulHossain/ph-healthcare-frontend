@@ -11,6 +11,7 @@ import {
   getDefaultDashboardRoutes,
   isValidRedirectPath,
 } from "@/lib/auth-utils";
+import { deleteCookie, setCookie } from "./tokenHandler";
 
 const loginValidationZodSchema = z.object({
   email: z.email("Give a valid email!"),
@@ -73,8 +74,7 @@ export const loginUser = async (
       throw new Error("No tokens found");
     }
 
-    const cookieStore = await cookies();
-    cookieStore.set("accessToken", accessTokenObject.accessToken, {
+    await setCookie("accessToken", accessTokenObject.accessToken, {
       httpOnly: true,
       maxAge: parseInt(accessTokenObject["Max-Age"]),
       expires: accessTokenObject.Expires,
@@ -82,7 +82,7 @@ export const loginUser = async (
       path: accessTokenObject.Path || "/",
       sameSite: accessTokenObject.SameSite || "none",
     });
-    cookieStore.set("refreshToken", refreshTokenObject.refreshToken, {
+    await setCookie("refreshToken", refreshTokenObject.refreshToken, {
       httpOnly: true,
       maxAge: parseInt(refreshTokenObject["Max-Age"]),
       expires: refreshTokenObject.Expires,
@@ -97,8 +97,7 @@ export const loginUser = async (
     );
 
     if (typeof verifiedToken === "string") {
-      cookieStore.delete("accessToken");
-      cookieStore.delete("refreshToken");
+      await deleteCookie();
       throw new Error("Invalid token");
     }
 
