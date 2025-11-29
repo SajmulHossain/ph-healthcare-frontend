@@ -2,8 +2,8 @@
 
 import ManagementHeader from "@/components/shared/ManagementHeader";
 import ManagementTable from "@/components/shared/ManagementTable";
+import RefreshButton from "@/components/shared/RefreshButton";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 
 const DoctorDashboardPage = () => {
@@ -13,7 +13,7 @@ const DoctorDashboardPage = () => {
         title="Management Header"
         action={{ label: "Read more", onClick: () => {}, icon: MoreHorizontal }}
       >
-        <Button>A button</Button>
+        <RefreshButton />
       </ManagementHeader>
       <ManagementTable
         columns={[
